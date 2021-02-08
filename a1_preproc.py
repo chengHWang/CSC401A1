@@ -37,7 +37,7 @@ def preproc1(comment , steps=range(1, 6)):
     if 1 in steps:  
         #modify this to handle other whitespace chars.
         #replace newlines with spaces
-        modComm = re.sub(r"\s{1, }", " ", modComm)
+        modComm = re.sub(r"\s+", " ", modComm)
 
     if 2 in steps:  # unescape html
         modComm = html.unescape(modComm)
@@ -47,17 +47,43 @@ def preproc1(comment , steps=range(1, 6)):
         modComm = re.sub(r"(http|www)\S+", "", modComm)
         
     if 4 in steps: #remove duplicate spaces.
-        modComm = re.sub(r" +", " ", modComm)
-
+        modComm = re.sub(r" {2,}", " ", modComm)
+        # one more important thing,
+        # if we found more spaces in the end of comment, we should remove it instead of make it 1 space.
+        modComm = re.sub(r" $", "", modComm)
     if 5 in steps:
-        print("TODO")
-        # TODO: get Spacy document for modComm
-        
-        # TODO: use Spacy document for modComm to create a string.
+        output = ""
+        utt = nlp(modComm)
+        for sent in utt.sents:
+            # print(sent.text)
+            for token in sent:
+                origin = token.text
+                lemma = token.lemma_
+                tag = token.tag_
+
+                lemma = re.sub(" ", "-", lemma) # to handle the "going to" problem mentioned in piazza
+                if lemma[0] == "-":
+                    # no -PRON-
+                    output = output + origin
+                else:
+                    x = re.search("^[A-Z]+$", origin)
+                    if x:
+                        # means the text is all uppercase, lemma should be uppercase as well
+                        output = output + lemma.upper()
+                    else:
+                        # else we want it in lower cases
+                        output = output + lemma.lower()
+                output = output + "/" + tag + " "
+            output += "\n"
+
+        modComm = output
         # Make sure to:
-        #    * Insert "\n" between sentences.
-        #    * Split tokens with spaces.
-        #    * Write "/POS" after each token.
+        #    * Insert "\n" between sentences.   Done
+        #    * Split tokens with spaces.        Done
+        #    * Write "/POS" after each token.   Done
+        #    * the hyphen problem               Done
+        #    * the upper case problem of lemma  Done
+            #   All Good! :)
             
     
     return modComm
@@ -65,25 +91,35 @@ def preproc1(comment , steps=range(1, 6)):
 
 def main(args):
     allOutput = []
-    for subdir, dirs, files in os.walk(indir):
+    for subdir, dirs, files in os.walk(indir):      # where is this indir come from??? that one in __main__?
         for file in files:
             fullFile = os.path.join(subdir, file)
             print( "Processing " + fullFile)
 
             data = json.load(open(fullFile))
 
-            # TODO: select appropriate args.max lines
-            # TODO: read those lines with something like `j = json.loads(line)`
-            # TODO: choose to retain fields from those lines that are relevant to you
-            # TODO: add a field to each selected line called 'cat' with the value of 'file' (e.g., 'Alt', 'Right', ...) 
-            # TODO: process the body field (j['body']) with preproc1(...) using default for `steps` argument
-            # TODO: replace the 'body' field with the processed text
-            # TODO: append the result to 'allOutput'
+            lines = int(args.max)                   # This represent how many comments this program will go through
+            staring_line = 1003812966 % len(data)   # This represent where we start, depending on student id
+
+            for lineIndex in range(staring_line, staring_line+lines):
+                if lineIndex >= len(data):
+                    lineIndex -= len(data) # circular the index
+
+                # read from the data and grab the data we need
+                j = json.loads(data[lineIndex])
+                commentId = j['id']
+                commentBody = j['body']
+                commentCat = str(file)
+
+                # ok that's all we want, now we need to build a new dic for the data
+                output = {'id': commentId, 'body': preproc1(commentBody), 'cat': commentCat}
+
+                allOutput.append(output)
             
     fout = open(args.output, 'w')
     fout.write(json.dumps(allOutput))
     fout.close()
-
+    # That's all for part1
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Process each .')
