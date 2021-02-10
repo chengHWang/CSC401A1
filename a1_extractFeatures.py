@@ -269,7 +269,7 @@ def extract2(feat, comment_class, comment_id):
         function adds feature 30-173). This should be a modified version of
         the parameter feats.
     """
-    assert feat[28] == 0
+    assert feat[29] == 0
     cat_num = categories.index(comment_class)
     feat[28:172] = LIWC_dic[cat_num][comment_id]
     return feat
