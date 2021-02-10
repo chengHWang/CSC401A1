@@ -107,9 +107,10 @@ def class31(output_dir, X_train, X_test, y_train, y_test):
             outf.write(f'\tRecall: {[round(item, 4) for item in recall_var]}\n')
             outf.write(f'\tPrecision: {[round(item, 4) for item in precision_var]}\n')
             outf.write(f'\tConfusion Matrix: \n{conf_matrix}\n\n')
-            # analysis
-            outf.write(f'under my environment, the ranking is:\n')
-            outf.write(f'AdaBoost >> RandomForest > MLP >> SGD > Gaussian\n')
+
+        # analysis
+        outf.write(f'under my environment, the ranking is:\n')
+        outf.write(f'AdaBoost >> RandomForest > MLP >> SGD > Gaussian\n')
 
     return best_index
 
