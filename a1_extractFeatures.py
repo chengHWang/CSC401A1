@@ -233,7 +233,7 @@ def extractFGroup2(v_words, features):
         features[25] = np.nanmean(DMS)
         features[28] = np.nanstd(DMS)
 
-    # Features 18-29 complete
+    # Features 18-29, index 17-28 complete
     return features
 
 categories = ['Left', 'Center', 'Right', 'Alt']
@@ -280,7 +280,7 @@ def extract2(feat, comment_class, comment_id):
     """
     assert feat[29] == 0
     cat_num = categories.index(comment_class)
-    feat[28:172] = LIWC_dic[cat_num][comment_id]
+    feat[29:173] = LIWC_dic[cat_num][comment_id]
     return feat
 
 
@@ -292,7 +292,7 @@ def main(args):
 
     for i, comment in enumerate(data):
         # check if the program is still running
-        if (i + 1) % 100 == 0:
+        if (i + 1) % 1000 == 0:
             print(f"step: '{i + 1}'")
 
         features = extract1(comment['body'])
