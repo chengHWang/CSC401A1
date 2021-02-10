@@ -230,7 +230,8 @@ def extractFGroup2(v_words, features):
 categories = ['Left', 'Center', 'Right', 'Alt']
 def LIWC_dic_generator():
     print("start building LIWC library")
-    direc = 'feats/'
+    direc = '/u/cs401/A1/feats/'
+
     ids = "_IDs.txt"
     featFile = "_feats.dat.npy"
     dictionaries= []
