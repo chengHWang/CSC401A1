@@ -133,6 +133,15 @@ regex_list = [
     r"(\b|^)(" + "|".join(SLANG) + ")(/[.]{0,4})"                   # No.14, index 13
 ]
 
+def flatten(arr):
+    new_arr = []
+    for a in arr:
+        if isinstance(a, pd.Series):
+            new_arr.extend(a.values)
+        else:
+            new_arr.append(a)
+    return new_arr
+
 
 wordlists_dir = "/u/cs401/Wordlists"
 def extractFGroup2(v_words, features):
@@ -166,6 +175,7 @@ def extractFGroup2(v_words, features):
     for x in bgl_value_list:
         w = x.get("AoA (100-700)", np.nan)
         AoA.append(w)
+    AoA = flatten(AoA)
     if AoA:
         # print("AoA is not empty")
         features[17] = np.nanmean(AoA)
@@ -177,6 +187,7 @@ def extractFGroup2(v_words, features):
         w = x.get("IMG", np.nan)
         IMG.append(w)
     # print(IMG)
+    IMG = flatten(IMG)
     if IMG:
         features[18] = np.nanmean(IMG)
         features[21] = np.nanstd(IMG)
