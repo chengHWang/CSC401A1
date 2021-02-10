@@ -198,6 +198,7 @@ def extractFGroup2(v_words, features):
         w = x.get("FAM", np.nan)
         FAM.append(w)
     # print(FAM)
+    FAM = flatten(FAM)
     if FAM:
         features[19] = np.nanmean(FAM)
         features[22] = np.nanstd(FAM)
@@ -207,6 +208,7 @@ def extractFGroup2(v_words, features):
     for x in rating_value_list:
         w = x.get("V.Mean.Sum", np.nan)
         VMS.append(w)
+    VMS = flatten(VMS)
     if VMS:
         features[23] = np.nanmean(VMS)
         features[26] = np.nanstd(VMS)
@@ -216,6 +218,7 @@ def extractFGroup2(v_words, features):
     for x in rating_value_list:
         w = x.get("A.Mean.Sum", np.nan)
         AMS.append(w)
+    AMS = flatten(AMS)
     if AMS:
         features[24] = np.nanmean(AMS)
         features[27] = np.nanstd(AMS)
@@ -225,6 +228,7 @@ def extractFGroup2(v_words, features):
     for x in rating_value_list:
         w = x.get("D.Mean.Sum", np.nan)
         DMS.append(w)
+    DMS = flatten(DMS)
     if DMS:
         features[25] = np.nanmean(DMS)
         features[28] = np.nanstd(DMS)
