@@ -165,7 +165,7 @@ def extractFGroup2(v_words, features):
     AoA = []
     for x in bgl_value_list:
         w = x.get("AoA (100-700)", np.nan)
-        if not np.isnan(w): # get rid of NAN
+        if not bool(np.isnan(w)): # get rid of NAN
             AoA.append(w)
     if AoA:
         # print("AoA is not empty")
@@ -176,7 +176,7 @@ def extractFGroup2(v_words, features):
     IMG = []
     for x in bgl_value_list:
         w = x.get("IMG", np.nan)
-        if not np.isnan(w): # get rid of NAN
+        if not bool(np.isnan(w)): # get rid of NAN
             IMG.append(w)
     # print(IMG)
     if IMG:
@@ -187,7 +187,7 @@ def extractFGroup2(v_words, features):
     FAM = []
     for x in bgl_value_list:
         w = x.get("FAM", np.nan)
-        if not np.isnan(w): # get rid of NAN
+        if not bool(np.isnan(w)): # get rid of NAN
             FAM.append(w)
     # print(FAM)
     if FAM:
@@ -198,7 +198,7 @@ def extractFGroup2(v_words, features):
     VMS = []
     for x in rating_value_list:
         w = x.get("V.Mean.Sum", np.nan)
-        if not np.isnan(w):
+        if not bool(np.isnan(w)):
             VMS.append(w)
     if VMS:
         features[23] = np.nanmean(VMS)
@@ -208,7 +208,7 @@ def extractFGroup2(v_words, features):
     AMS = []
     for x in rating_value_list:
         w = x.get("A.Mean.Sum", np.nan)
-        if not np.isnan(w):
+        if not bool(np.isnan(w)):
             AMS.append(w)
     if AMS:
         features[24] = np.nanmean(AMS)
@@ -218,7 +218,7 @@ def extractFGroup2(v_words, features):
     DMS = []
     for x in rating_value_list:
         w = x.get("D.Mean.Sum", np.nan)
-        if not np.isnan(w):
+        if not bool(np.isnan(w)):
             DMS.append(w)
     if DMS:
         features[25] = np.nanmean(DMS)
