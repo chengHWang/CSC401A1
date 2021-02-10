@@ -292,7 +292,7 @@ def main(args):
 
     for i, comment in enumerate(data):
         # check if the program is still running
-        if (i + 1) % 1000 == 0:
+        if (i + 1) % 100 == 0:
             print(f"step: '{i + 1}'")
 
         features = extract1(comment['body'])
