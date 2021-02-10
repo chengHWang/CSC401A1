@@ -281,11 +281,10 @@ def main(args):
     data = json.load(open(args.input))
     feats = np.zeros((len(data), 173+1))
 
-    starting_time = time.clock()
     for i, comment in enumerate(data):
         # check if the program is still running
         if (i + 1) % 1000 == 0:
-            print(f"step: '{i + 1}' at time '{time.clock() - starting_time}'")
+            print(f"step: '{i + 1}'")
 
         features = extract1(comment['body'])
         # This features only have 173 slots, and only Slot 0-28 filled yet.
