@@ -14,7 +14,6 @@ import json
 import re
 import pandas as pd
 import os
-import time
 
 path = "/u/cs401/A1/feats"
 
@@ -116,7 +115,7 @@ def extractFGroup1(comment, features):
 
 # This global list storing all the regex for extractFGroup1, entry i for Feature i+1
 regex_list = [
-    r"([A-Z]\w{2,})/",                                    # No.1, index 0
+    r"([A-Z]{3,})/",                                                # No.1, index 0
     r"(?<=\b)(" + "|".join(FIRST_PERSON_PRONOUNS) + ")(?=\/)",
     r"(?<=\b)(" + "|".join(SECOND_PERSON_PRONOUNS) + ")(?=\/)",
     r"(?<=\b)(" + "|".join(THIRD_PERSON_PRONOUNS) + ")(?=\/)",
@@ -263,7 +262,7 @@ def LIWC_dic_generator():
         f.close()
     return dictionaries
 LIWC_dic = LIWC_dic_generator()
-# I make it global so it only need to run 1 time.
+# I make it global so it only need to run 1 time, and increase the program's efficiency a lot.
 
 def extract2(feat, comment_class, comment_id):
     """ This function adds features 30-173 for a single comment.
@@ -278,7 +277,7 @@ def extract2(feat, comment_class, comment_id):
         function adds feature 30-173). This should be a modified version of
         the parameter feats.
     """
-    assert feat[29] == 0
+    assert feat[29] == 0    # just in case
     cat_num = categories.index(comment_class)
     feat[29:173] = LIWC_dic[cat_num][comment_id]
     return feat
@@ -296,14 +295,18 @@ def main(args):
             print(f"step: '{i + 1}'")
 
         features = extract1(comment['body'])
+
         # This features only have 173 slots, and only Slot 0-28 filled yet.
         features = extract2(features, comment['cat'], comment['id'])
+
         # Convert features to feats and filled the last slot of cat
         feats[i, :-1]=features
+
+        # Fill in the last entry to represent the categories
         feats[i, -1] = categories.index(comment['cat'])
 
     np.savez_compressed(args.output, feats)
-
+    # end
     
 if __name__ == "__main__": 
     parser = argparse.ArgumentParser(description='Process each .')
